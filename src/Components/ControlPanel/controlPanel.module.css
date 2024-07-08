@@ -1,0 +1,21 @@
+.control {
+  padding: 10px;
+}
+.title {
+  margin: 0;
+}
+.inner {
+  display: flex;
+  gap: 50px;
+}
+.info {
+  flex: 1;
+  align-self: flex-start;
+}
+.buttongroup {
+  display: flex;
+  gap: 20px;
+}
+.buttongroup button {
+  height: 50px;
+}
