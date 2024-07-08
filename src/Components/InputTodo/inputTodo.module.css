@@ -1,0 +1,10 @@
+.input {
+  width: 100%;
+  outline: none;
+  border: none;
+  resize: none;
+  background-color: #e7f5ff;
+}
+.input:disabled {
+  background-color: inherit;
+}
