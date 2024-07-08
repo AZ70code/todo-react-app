@@ -3,72 +3,71 @@ import {
   Table,
   TableBody,
   TableCell,
-  TableHead,
   TableRow,
   Paper,
   TableContainer,
-  styled,
-  tableCellClasses,
-  Checkbox,
   IconButton,
 } from "@mui/material";
 import CreateIcon from "@mui/icons-material/Create";
 import FolderZipIcon from "@mui/icons-material/FolderZip";
 import DeleteIcon from "@mui/icons-material/Delete";
+import InputTodo from "../InputTodo/inputTodo";
+import TableHeader from "../Table/tableHeader";
+import Completed from "../completed";
 
-const StyledTableCell = styled(TableCell)(({ theme }) => ({
-  [`&.${tableCellClasses.head}`]: {
-    backgroundColor: theme.palette.primary.light,
-    color: theme.palette.common.white,
-    fontWeight: 700,
-  },
-  [`&.${tableCellClasses.body}`]: {
-    fontSize: 16,
-  },
-}));
-
-const Todos = ({data}) => (
-  <>
-    <TableContainer component={Paper}>
+const Todos = ({
+  data,
+  onDeleteTodo,
+  onRemoveToArchive,
+  onEditTodo,
+  stopEdit,
+  disabled,
+  editId,
+	onComplete
+}) => (
+  <div>
+		<h2>TODO List</h2>
+    <TableContainer component={Paper} sx={{marginBottom: 5}}>
       <Table size="small" aria-label="table">
-        <TableHead>
-          <TableRow>
-            <StyledTableCell width={30}>Nom.</StyledTableCell>
-            <StyledTableCell width={50}>Completed</StyledTableCell>
-            <StyledTableCell width={150}>Name</StyledTableCell>
-            <StyledTableCell width={100}>Date</StyledTableCell>
-            <StyledTableCell width={50}>Category</StyledTableCell>
-            <StyledTableCell align="center">Text</StyledTableCell>
-            <StyledTableCell width={150}>
-              <CreateIcon />
-              <FolderZipIcon />
-              <DeleteIcon />
-            </StyledTableCell>
-          </TableRow>
-        </TableHead>
+        <TableHeader>
+          <CreateIcon />
+          <FolderZipIcon />
+          <DeleteIcon />
+        </TableHeader>
         <TableBody>
-          {data.map((item) => {
+          {data.map((item, index) => {
+						console.log(item.completed)
             return (
               <TableRow key={item.id} sx={{ "&:nth-of-type(even)": { backgroundColor: "#eee" } }}>
                 <TableCell sx={{ padding: 1 }} align="center">
-                  {item.id}
+                  {index + 1}
                 </TableCell>
                 <TableCell sx={{ padding: 1 }} align="center">
-                  <Checkbox />
+									<Completed onChecked={item.completed} disabled={false} onChange={()=>onComplete(item.id)}/>
                 </TableCell>
                 <TableCell sx={{ padding: 1 }}>{item.name}</TableCell>
                 <TableCell sx={{ padding: 1 }}>{item.created}</TableCell>
                 <TableCell sx={{ padding: 1 }}>{item.category}</TableCell>
-                <TableCell sx={{ padding: 1 }}>{item.content}</TableCell>
                 <TableCell sx={{ padding: 1 }}>
-                  <IconButton size="small" variant="outlined">
-                    <CreateIcon color="success" />
+                  <InputTodo
+                    text={item.content}
+                    disabled={item.id === editId ? disabled : true}
+                    stopEdit={stopEdit}
+                  />
+                </TableCell>
+                <TableCell sx={{ padding: 1 }}>
+                  <IconButton size="small" variant="outlined" onClick={() => onEditTodo(item.id)}>
+                    <CreateIcon color="success" titleAccess="create"/>
                   </IconButton>
-                  <IconButton size="small" variant="outlined">
-                    <FolderZipIcon color="warning" />
+                  <IconButton
+                    size="small"
+                    variant="outlined"
+                    onClick={() => onRemoveToArchive(item.id)}
+                  >
+                    <FolderZipIcon color="warning" titleAccess="zip"/>
                   </IconButton>
-                  <IconButton size="small" variant="outlined">
-                    <DeleteIcon color="error" />
+                  <IconButton size="small" variant="outlined" onClick={() => onDeleteTodo(item.id)}>
+                    <DeleteIcon color="error" titleAccess="delete"/>
                   </IconButton>
                 </TableCell>
               </TableRow>
@@ -77,6 +76,6 @@ const Todos = ({data}) => (
         </TableBody>
       </Table>
     </TableContainer>
-  </>
+  </div>
 );
 export default Todos;
