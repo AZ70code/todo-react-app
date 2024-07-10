@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 
-const Completed = ({disabled, onChecked, onChange,}) => {
+const Completed = ({disabled, onChecked, onChange}) => {
 	return(
 		<input type="checkbox" disabled={disabled} checked={onChecked} onChange={onChange}/>
 	)
