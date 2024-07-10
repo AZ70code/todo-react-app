@@ -71,7 +71,7 @@ const Todos = ({
                       onClick={() => onRemoveToArchive(item.id)}
                     >
                       <Tooltip title="Archive">
-                        <FolderZipIcon color="warning" aria-label="archive todo button"/>
+                        <FolderZipIcon color="warning" aria-label="archive todo button" />
                       </Tooltip>
                     </IconButton>
                     <IconButton
@@ -80,7 +80,7 @@ const Todos = ({
                       onClick={() => onDeleteTodo(item.id)}
                     >
                       <Tooltip title="Delete">
-                        <DeleteIcon color="error" aria-label="delete todo button"/>
+                        <DeleteIcon color="error" aria-label="delete todo button" />
                       </Tooltip>
                     </IconButton>
                   </TableCell>

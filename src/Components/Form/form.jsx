@@ -33,7 +33,7 @@ const Form = ({ onSubmit, onCloseModal }) => {
       category,
       text,
       date: createdDate.toLocaleString([], {
-        year: "2-digit",
+        year: "numeric",
         month: "2-digit",
         day: "2-digit",
         hour: "2-digit",
