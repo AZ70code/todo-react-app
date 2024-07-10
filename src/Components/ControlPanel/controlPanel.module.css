@@ -1,21 +1,45 @@
 .control {
-  padding: 10px;
+  padding: 10px 0;
+  text-align: left;
+  margin-bottom: 20px;
 }
 .title {
-  margin: 0;
+  margin: 0 0 10px 0;
 }
 .inner {
   display: flex;
-  gap: 50px;
+  justify-content: space-between;
+  gap: 20px;
 }
 .info {
-  flex: 1;
+  width: 400px;
+  flex: 0 0 auto;
   align-self: flex-start;
+  padding: 10px 20px;
+  background-color: #42a5f5;
+  border-radius: 5px;
+  color: #fff;
+  display: flex;
+  gap: 20px;
+}
+.info p {
+  font-size: 1.25em;
+  margin: 0.3em 0;
+}
+.output {
+  flex: 0 0 35%;
 }
 .buttongroup {
   display: flex;
+  flex-direction: column;
   gap: 20px;
 }
 .buttongroup button {
   height: 50px;
+}
+.border {
+  border-right: 1px solid white;
+}
+.filter {
+  flex: 0 0 auto;
 }
