@@ -24,9 +24,9 @@ const Todos = ({
   disabled,
   editId,
 	onComplete
-}) => (
+}) => {
+	return (
   <div>
-		<h2>TODO List</h2>
     <TableContainer component={Paper} sx={{marginBottom: 5}}>
       <Table size="small" aria-label="table">
         <TableHeader>
@@ -36,7 +36,6 @@ const Todos = ({
         </TableHeader>
         <TableBody>
           {data.map((item, index) => {
-						console.log(item.completed)
             return (
               <TableRow key={item.id} sx={{ "&:nth-of-type(even)": { backgroundColor: "#eee" } }}>
                 <TableCell sx={{ padding: 1 }} align="center">
@@ -52,7 +51,7 @@ const Todos = ({
                   <InputTodo
                     text={item.content}
                     disabled={item.id === editId ? disabled : true}
-                    stopEdit={stopEdit}
+                    stopEdit={(e)=>stopEdit(item.id, e.target.value)}
                   />
                 </TableCell>
                 <TableCell sx={{ padding: 1 }}>
@@ -77,5 +76,5 @@ const Todos = ({
       </Table>
     </TableContainer>
   </div>
-);
+)};
 export default Todos;
