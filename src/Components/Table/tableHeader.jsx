@@ -19,12 +19,12 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   },
 }));
 
-const TableHeader = ({children, color}) => (
+const TableHeader = ({children}) => (
   <>
     <TableHead>
       <TableRow>
         <StyledTableCell width={30}>Nom.</StyledTableCell>
-        <StyledTableCell width={30}>Completed</StyledTableCell>
+        <StyledTableCell width={30}>Compl.</StyledTableCell>
         <StyledTableCell width={150}>Name</StyledTableCell>
         <StyledTableCell width={150}>Date</StyledTableCell>
         <StyledTableCell width={50}>Category</StyledTableCell>
