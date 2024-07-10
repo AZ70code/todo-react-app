@@ -1,0 +1,20 @@
+.form {
+  padding: 20px;
+  background-color: #9ad2ff;
+  width: 50%;
+  border-radius: 5px;
+  margin: 0 auto;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+}
+.btns {
+  align-self: flex-end;
+}
+.name,
+.message,
+.category {
+  background-color: #fff;
+  border: none;
+  outline: none;
+}
