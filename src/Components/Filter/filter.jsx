@@ -30,6 +30,8 @@ const Filter = ({ filterValue, onFilterCategory, onFilterCompleted }) => {
           },
         })}
       />
+			<label className={style.label}>Select todos</label>
+			<br />
       <label className={style.label}>
         <input type="radio" name="completed" value={'all'} defaultChecked onChange={onFilterCompleted} />
         &nbsp; all

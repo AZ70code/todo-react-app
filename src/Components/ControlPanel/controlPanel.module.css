@@ -30,12 +30,9 @@
   flex: 0 0 35%;
 }
 .buttongroup {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-.buttongroup button {
-  height: 50px;
+  padding: 10px;
+  border: 1px solid white;
+  border-radius: 5px;
 }
 .border {
   border-right: 1px solid white;

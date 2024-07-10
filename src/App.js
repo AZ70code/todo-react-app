@@ -110,7 +110,6 @@ const App = () => {
     <div className="app">
       {isModal && <Modal onSubmit={addTodo} onCloseModal={toggleModal} />}
       <Container>
-        <h1>TODO List</h1>
         <ControlPanel
           total={total}
           archived={archived}
