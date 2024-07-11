@@ -3,12 +3,12 @@
     {
       "name": "Shopping list",
       "category": "Task",
-      "content": "to buy bread, beer and meat",
+      "content": "to buy bread, beer and meatsdffff",
       "created": "11.10.2022, 11:20",
       "dates": "",
       "archived": false,
-      "completed": false,
-      "id": 1
+      "completed": true,
+      "id": "1"
     },
     {
       "name": "Plans for the weekend",
@@ -17,8 +17,8 @@
       "created": "12.10.2022, 16:22",
       "dates": "",
       "archived": false,
-      "completed": false,
-      "id": 2
+      "completed": true,
+      "id": "2"
     },
     {
       "name": "Taxes",
@@ -27,8 +27,8 @@
       "created": "12.10.2022, 16:42",
       "dates": " 20/03/22",
       "archived": false,
-      "completed": false,
-      "id": 3
+      "completed": true,
+      "id": "3"
     },
     {
       "name": "My health",
@@ -37,8 +37,8 @@
       "created": "13.10.2022, 14:35",
       "dates": null,
       "archived": false,
-      "completed": false,
-      "id": 4
+      "completed": true,
+      "id": "4"
     },
     {
       "name": "My thoughts",
@@ -48,7 +48,7 @@
       "dates": null,
       "archived": false,
       "completed": false,
-      "id": 5
+      "id": "5"
     }
   ]
 }
