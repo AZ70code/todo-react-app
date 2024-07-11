@@ -1,30 +1,36 @@
 import "./App.css";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Container from "./Components/Container/container";
 import Todos from "./Components/Todos/todos";
-import json from "./db.json";
 import Archive from "./Components/Archive/archive";
 import ControlPanel from "./Components/ControlPanel/controlPanel";
-import ShortUniqueId from "short-unique-id";
 import Modal from "./Components/Modal/modal";
+import todosApi from "./Components/Api/todos-api";
 
 const App = () => {
-  const initialData = json.TABLE_CONTENT;
-  const [data, setData] = useState(initialData);
+  const [todos, setTodos] = useState([]);
   const [archive, setArchive] = useState([]);
   const [edit, setEdit] = useState({ disabled: true, id: null });
   const [isArchive, setIsArchive] = useState(false);
   const [isModal, setIsModal] = useState(false);
   const [filter, setFilter] = useState({ category: "all", completed: "all" });
+  useEffect(() => {
+    todosApi
+      .fetchTodos()
+      .then((todos) => {
+        setTodos(todos);
+      })
+      .catch((error) => console.log(error));
+  }, []);
 
-  const total = data.length;
+  const total = todos.length;
   const archived = archive.length;
-  const completed = data.reduce(
+  const completed = todos.reduce(
     (acc, todo) => (todo.completed ? acc + 1 : acc),
     0,
   );
   const filteredTodos = () => {
-    const filteredCompTodos = data.filter((todo) => {
+    const filteredCompTodos = todos.filter((todo) => {
       if (filter.completed !== "all") {
         return todo.completed === JSON.parse(filter.completed);
       } else return todo;
@@ -40,53 +46,70 @@ const App = () => {
   const filteredData = filteredTodos();
 
   const handleDelete = (todoId) => {
-    setData(data.filter((todo) => todo.id !== todoId));
+    todosApi
+      .deleteTodo(todoId)
+      .then(() => {
+        setTodos(todos.filter((todo) => todo.id !== todoId));
+      })
+      .catch((error) => console.log(error));
   };
   const handleToArchive = (todoId) => {
-    setData(data.filter((todo) => todo.id !== todoId));
-    setArchive([...archive, data.find((todo) => todo.id === todoId)]);
+    setTodos(todos.filter((todo) => todo.id !== todoId));
+    setArchive([...archive, todos.find((todo) => todo.id === todoId)]);
   };
   const handleFromArchive = (todoId) => {
     setArchive(archive.filter((todo) => todo.id !== todoId));
-    setData([...data, archive.find((todo) => todo.id === todoId)]);
+    setTodos([...todos, archive.find((todo) => todo.id === todoId)]);
   };
   const handleEdit = (todoId) => {
     setEdit({ ...edit, ...{ disabled: false, id: todoId } });
   };
   const saveEditTodo = (todoId, value) => {
-    setEdit({ ...edit, disabled: true });
-    setData(
-      data.map((todo) => {
-        if (todo.id === todoId) {
-          return {
-            ...todo,
-            content: value,
-          };
-        }
-        return todo;
-      }),
-    );
+    todosApi
+      .editTodo(todoId, { content: value })
+      .then(() => {
+        setEdit({ ...edit, disabled: true });
+      })
+      .catch((error) => console.log(error));
+
+    // setTodos(
+    //   todos.map((todo) => {
+    //     if (todo.id === todoId) {
+    //       return {
+    //         ...todo,
+    //         content: value,
+    //       };
+    //     }
+    //     return todo;
+    //   }),
+    // );
   };
   const handleComplete = (todoId) => {
-    setData(
-      data.map((todo) => {
-        if (todo.id === todoId) {
-          return {
-            ...todo,
-            completed: !todo.completed,
-          };
-        }
-        return todo;
-      }),
-    );
+    const todo = todos.find(({ id }) => id === todoId);
+    const { completed } = todo;
+    todosApi
+      .completeTodo(todoId, { completed: !completed })
+      .then((data) => {
+        setTodos(
+          todos.map((todo) => {
+            if (todo.id === data.id) {
+              return {
+                ...todo,
+                completed: !todo.completed,
+              };
+            }
+            return todo;
+          }),
+        );
+      })
+      .catch((error) => console.log(error));
   };
   const showArchive = () => setIsArchive(!isArchive);
   const toggleModal = () => {
     setIsModal(!isModal);
   };
   const addTodo = (message) => {
-    const uid = new ShortUniqueId();
-    const todo = {
+    const todoObj = {
       name: message.name,
       category: message.category,
       content: message.text,
@@ -94,10 +117,14 @@ const App = () => {
       dates: "",
       archived: false,
       completed: false,
-      id: uid.rnd(),
     };
-    setData([todo, ...data]);
-    setIsModal(false);
+    todosApi
+      .addTodo(todoObj)
+      .then((todo) => {
+        setTodos([...todos, todo]);
+        toggleModal();
+      })
+      .catch((error) => console.log(error));
   };
   const handleFilterCompleted = (e) => {
     setFilter({ ...filter, completed: e.currentTarget.value });
