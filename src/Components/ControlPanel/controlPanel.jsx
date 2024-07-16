@@ -2,17 +2,24 @@ import React from "react";
 import style from "./controlPanel.module.css";
 import { Button, Stack } from "@mui/material";
 import Filter from "../Filter/filter";
+import { useSelector } from "react-redux";
+import { archiveTodos, selectTodos } from "../../redux/todosSlice";
 
 const ControlPanel = ({
-  total,
-  archived,
-  completed,
   onArchive,
   onForm,
-  filterValue,
-  onFilterCompleted,
-  onFilterCategory,
 }) => {
+
+	const todos = useSelector(selectTodos)
+	const archTodos = useSelector(archiveTodos);
+	
+  const total = todos.length;
+  const archived = archTodos.length;
+  const completed = todos.reduce(
+    (acc, todo) => (todo.completed ? acc + 1 : acc),
+    0,
+  );
+
   return (
     <div className={style.control}>
       <div className={style.inner}>
@@ -27,9 +34,6 @@ const ControlPanel = ({
           <div className={style.filter}>
             <h2 className={style.title}>Filter</h2>
             <Filter
-              filterValue={filterValue}
-              onFilterCompleted={onFilterCompleted}
-              onFilterCategory={onFilterCategory}
             />
           </div>
         </div>

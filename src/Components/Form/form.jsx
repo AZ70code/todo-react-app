@@ -10,12 +10,16 @@ import {
   Stack,
   TextField,
 } from "@mui/material";
+import { useDispatch } from "react-redux";
+import { addFetchTodo } from "../Api/todos-api";
+import { nanoid } from "@reduxjs/toolkit";
 
-const Form = ({ onSubmit, onCloseModal }) => {
+const Form = ({ onCloseModal }) => {
   const [category, setCategory] = React.useState("");
   const [name, setName] = React.useState("");
-  const [text, setText] = React.useState("");
+  const [content, setContent] = React.useState("");
 
+  const dispatch = useDispatch();
   const handleChangeCategory = (e) => {
     setCategory(e.target.value);
   };
@@ -23,31 +27,34 @@ const Form = ({ onSubmit, onCloseModal }) => {
     setName(e.target.value);
   };
   const handleText = (e) => {
-    setText(e.target.value);
+    setContent(e.target.value);
   };
   const handleSubmit = (e) => {
     e.preventDefault();
-    let createdDate = new Date();
     const message = {
+      id: nanoid(),
       name,
       category,
-      text,
-      date: createdDate.toLocaleString([], {
+      content: content,
+      completed: false,
+      created: new Date().toLocaleString([], {
         year: "numeric",
         month: "2-digit",
         day: "2-digit",
         hour: "2-digit",
         minute: "2-digit",
-      }),
+      })
     };
-		if(name && category && text) {
-			onSubmit(message);
-			setCategory("");
-			setName("");
-			setText("");
-		} else {
-			alert("Fill out all fields of the form to create new note")
-		}
+
+    if (name && category && content) {
+      dispatch(addFetchTodo(message));
+      setCategory("");
+      setName("");
+      setContent("");
+      onCloseModal();
+    } else {
+      alert("Fill out all fields of the form to create new note");
+    }
   };
   return (
     <form className={style.form} onSubmit={handleSubmit}>
@@ -90,7 +97,7 @@ const Form = ({ onSubmit, onCloseModal }) => {
             multiline
             rows={4}
             onChange={handleText}
-            value={text}
+            value={content}
           />
         </FormControl>
       </Box>
@@ -103,10 +110,16 @@ const Form = ({ onSubmit, onCloseModal }) => {
           size="large"
           type="submit"
         />
-        <Button color="success" children="CLOSE" variant="contained" size="large" type="button" onClick={onCloseModal}/>
+        <Button
+          color="success"
+          children="CLOSE"
+          variant="contained"
+          size="large"
+          type="button"
+          onClick={onCloseModal}
+        />
       </Stack>
     </form>
   );
 };
-
 export default Form;

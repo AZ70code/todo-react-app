@@ -12,8 +12,13 @@ import FolderZipIcon from "@mui/icons-material/FolderZip";
 import InputTodo from "../InputTodo/inputTodo";
 import TableHeader from "../Table/tableHeader";
 import Completed from "../completed";
+import { useDispatch, useSelector } from "react-redux";
+import { archiveTodos, todoFromArchive } from "../../redux/todosSlice";
 
-const Archive = ({data, onRemoveFromArchive}) => (
+const Archive = () => {
+	const dispatch = useDispatch();
+	const archTodos = useSelector(archiveTodos)
+	return (
   <>
 			<h2>Archive List</h2>
     <TableContainer component={Paper}>
@@ -22,7 +27,7 @@ const Archive = ({data, onRemoveFromArchive}) => (
           <FolderZipIcon />
         </TableHeader>
         <TableBody>
-          {data.map((item, index) => {
+          {archTodos.map((item, index) => {
             return (
               <TableRow key={item.id} sx={{ "&:nth-of-type(even)": { backgroundColor: "#eee" }}}>
                 <TableCell sx={{ padding: 1 }} align="center">
@@ -41,7 +46,7 @@ const Archive = ({data, onRemoveFromArchive}) => (
                   <IconButton
                     size="small"
                     variant="outlined"
-										onClick={() => onRemoveFromArchive(item.id)}
+										onClick={() => dispatch(todoFromArchive(item.id))}
                   >
                     <FolderZipIcon color="warning" />
                   </IconButton>
@@ -53,5 +58,5 @@ const Archive = ({data, onRemoveFromArchive}) => (
       </Table>
     </TableContainer>
   </>
-);
+)};
 export default Archive;

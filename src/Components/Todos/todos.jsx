@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Table,
   TableBody,
@@ -15,17 +15,49 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import InputTodo from "../InputTodo/inputTodo";
 import TableHeader from "../Table/tableHeader";
 import Completed from "../completed";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  filterTodos,
+  selectTodos,
+  todoToArchive,
+} from "../../redux/todosSlice";
+import { completeFetchTodo, deleteFetchTodo, editFetchTodo } from "../Api/todos-api";
 
-const Todos = ({
-  data,
-  onDeleteTodo,
-  onRemoveToArchive,
-  onEditTodo,
-  stopEdit,
-  disabled,
-  editId,
-  onComplete,
-}) => {
+const Todos = () => {
+  const [edit, setEdit] = useState({ disabled: true, id: null });
+
+  const dispatch = useDispatch();
+  const todos = useSelector(selectTodos);
+  const filter = useSelector(filterTodos);
+
+
+
+  const handleEdit = (todoId) => {
+    setEdit({ ...edit, ...{ disabled: false, id: todoId } });
+  };
+  const handleBlur = (todoId, value) => {
+    setEdit({ ...edit, disabled: true, id: todoId });
+		const editData = { todoId, value }
+    dispatch(editFetchTodo(editData));
+  };
+  const filteredTodos = () => {
+    const filteredCompTodos = todos.filter((todo) => {
+      if (filter.completed !== "all") {
+        return todo.completed === JSON.parse(filter.completed);
+      } else {
+				return todo;
+			}
+    });
+
+    const filteredCatTodos = filteredCompTodos.filter((todo) => {
+      if (filter.category !== "all") {
+        return todo.category === filter.category;
+      } else return todo;
+    });
+    return filteredCatTodos;
+  };
+  const filteredData = filteredTodos();
+
   return (
     <div>
       <TableContainer component={Paper} sx={{ marginBottom: 5 }}>
@@ -36,7 +68,7 @@ const Todos = ({
             <DeleteIcon />
           </TableHeader>
           <TableBody>
-            {data.map((item, index) => {
+            {filteredData.map((item, index) => {
               return (
                 <TableRow key={item.id} sx={{ "&:nth-of-type(even)": { backgroundColor: "#eee" } }}>
                   <TableCell sx={{ padding: 1 }} align="center">
@@ -46,7 +78,7 @@ const Todos = ({
                     <Completed
                       onChecked={item.completed}
                       disabled={false}
-                      onChange={() => onComplete(item.id)}
+                      onChange={() => dispatch(completeFetchTodo(item.id))}
                     />
                   </TableCell>
                   <TableCell sx={{ padding: 1 }}>{item.name}</TableCell>
@@ -55,12 +87,12 @@ const Todos = ({
                   <TableCell sx={{ padding: 1 }}>
                     <InputTodo
                       text={item.content}
-                      disabled={item.id === editId ? disabled : true}
-                      stopEdit={(e) => stopEdit(item.id, e.target.value)}
+                      disabled={item.id === edit.id ? edit.disabled : true}
+                      stopEdit={(e) => handleBlur(item.id, e.target.value)}
                     />
                   </TableCell>
                   <TableCell sx={{ padding: 1 }}>
-                    <IconButton size="small" variant="outlined" onClick={() => onEditTodo(item.id)}>
+                    <IconButton size="small" variant="outlined" onClick={() => handleEdit(item.id)}>
                       <Tooltip title="Edit">
                         <CreateIcon color="success" aria-label="edit todo button" />
                       </Tooltip>
@@ -68,7 +100,7 @@ const Todos = ({
                     <IconButton
                       size="small"
                       variant="outlined"
-                      onClick={() => onRemoveToArchive(item.id)}
+                      onClick={() => dispatch(todoToArchive(item.id))}
                     >
                       <Tooltip title="Archive">
                         <FolderZipIcon color="warning" aria-label="archive todo button" />
@@ -77,7 +109,7 @@ const Todos = ({
                     <IconButton
                       size="small"
                       variant="outlined"
-                      onClick={() => onDeleteTodo(item.id)}
+                      onClick={() => dispatch(deleteFetchTodo(item.id))}
                     >
                       <Tooltip title="Delete">
                         <DeleteIcon color="error" aria-label="delete todo button" />
