@@ -3,11 +3,16 @@
   color: #666;
   width: 100%;
 }
+.title_label {
+  font-size: 1.25em;
+  line-height: 1.5;
+}
 .label {
   display: inline-block;
   margin-bottom: 5px;
   vertical-align: top;
   line-height: 1.2;
+  cursor: pointer;
 }
 .radio {
   vertical-align: top;
