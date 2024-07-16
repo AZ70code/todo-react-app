@@ -7,7 +7,7 @@
       "created": "11.10.2022, 11:20",
       "dates": "",
       "archived": false,
-      "completed": true,
+      "completed": false,
       "id": "1"
     },
     {
@@ -17,7 +17,7 @@
       "created": "12.10.2022, 16:22",
       "dates": "",
       "archived": false,
-      "completed": true,
+      "completed": false,
       "id": "2"
     },
     {
@@ -27,7 +27,7 @@
       "created": "12.10.2022, 16:42",
       "dates": " 20/03/22",
       "archived": false,
-      "completed": true,
+      "completed": false,
       "id": "3"
     },
     {
@@ -43,7 +43,7 @@
     {
       "name": "My thoughts",
       "category": "Random Thought",
-      "content": "it would be cool to live in the mountains",
+      "content": "it would be cool to live in the mountains76767",
       "created": "13.10.2022, 16:47",
       "dates": null,
       "archived": false,
