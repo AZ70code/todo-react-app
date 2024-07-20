@@ -16,47 +16,28 @@ import InputTodo from "../InputTodo/inputTodo";
 import TableHeader from "../Table/tableHeader";
 import Completed from "../completed";
 import { useDispatch, useSelector } from "react-redux";
+import { selectTodos } from "../../redux/todosSlice";
 import {
-  filterTodos,
-  selectTodos,
-  todoToArchive,
-} from "../../redux/todosSlice";
-import { completeFetchTodo, deleteFetchTodo, editFetchTodo } from "../Api/todos-api";
+  completeFetchTodo,
+  deleteFetchTodo,
+  editFetchTodo,
+  todoFetchToArchive,
+} from "../Api/todos-api";
 
 const Todos = () => {
   const [edit, setEdit] = useState({ disabled: true, id: null });
 
   const dispatch = useDispatch();
   const todos = useSelector(selectTodos);
-  const filter = useSelector(filterTodos);
-
-
 
   const handleEdit = (todoId) => {
-    setEdit({ ...edit, ...{ disabled: false, id: todoId } });
+    setEdit({ ...edit, ...{ disabled: false, id: todoId }});
   };
   const handleBlur = (todoId, value) => {
     setEdit({ ...edit, disabled: true, id: todoId });
-		const editData = { todoId, value }
+    const editData = { todoId, value };
     dispatch(editFetchTodo(editData));
   };
-  const filteredTodos = () => {
-    const filteredCompTodos = todos.filter((todo) => {
-      if (filter.completed !== "all") {
-        return todo.completed === JSON.parse(filter.completed);
-      } else {
-				return todo;
-			}
-    });
-
-    const filteredCatTodos = filteredCompTodos.filter((todo) => {
-      if (filter.category !== "all") {
-        return todo.category === filter.category;
-      } else return todo;
-    });
-    return filteredCatTodos;
-  };
-  const filteredData = filteredTodos();
 
   return (
     <div>
@@ -68,7 +49,7 @@ const Todos = () => {
             <DeleteIcon />
           </TableHeader>
           <TableBody>
-            {filteredData.map((item, index) => {
+            {todos.map((item, index) => {
               return (
                 <TableRow key={item.id} sx={{ "&:nth-of-type(even)": { backgroundColor: "#eee" } }}>
                   <TableCell sx={{ padding: 1 }} align="center">
@@ -100,7 +81,7 @@ const Todos = () => {
                     <IconButton
                       size="small"
                       variant="outlined"
-                      onClick={() => dispatch(todoToArchive(item.id))}
+                      onClick={() => dispatch(todoFetchToArchive(item.id, false))}
                     >
                       <Tooltip title="Archive">
                         <FolderZipIcon color="warning" aria-label="archive todo button" />

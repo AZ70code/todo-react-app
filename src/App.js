@@ -5,7 +5,6 @@ import Todos from "./Components/Todos/todos";
 import Archive from "./Components/Archive/archive";
 import ControlPanel from "./Components/ControlPanel/controlPanel";
 import Modal from "./Components/Modal/modal";
-// import todosApi from "./Components/Api/todos-api";
 import { useDispatch, useSelector } from "react-redux";
 import { todosError, todosStatus } from "./redux/todosSlice";
 import { fetchTodos } from "./Components/Api/todos-api";
@@ -24,14 +23,6 @@ const App = () => {
     }
   }, [status, dispatch]);
 
-  let content;
-
-  if (status === "loading") {
-    content = <h2>Loading...</h2>;
-  } else if (status === "failed") {
-    content = <h2>{error}</h2>;
-  }
-
   const showArchive = () => setIsArchive(!isArchive);
   const toggleModal = () => {
     setIsModal(!isModal);
@@ -42,7 +33,9 @@ const App = () => {
       {isModal && <Modal onCloseModal={toggleModal} />}
       <Container>
         <ControlPanel onArchive={showArchive} onForm={toggleModal} />
-        {!content ? <Todos /> : content}
+        {status === "loading" && <h2>Loading...</h2>}
+        {status === "failed" && <h2>{error}</h2>}
+        {status === "succeeded" && <Todos />}
         {isArchive && <Archive />}
       </Container>
     </div>

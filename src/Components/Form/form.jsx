@@ -43,7 +43,7 @@ const Form = ({ onCloseModal }) => {
         day: "2-digit",
         hour: "2-digit",
         minute: "2-digit",
-      })
+      }),
     };
 
     if (name && category && content) {

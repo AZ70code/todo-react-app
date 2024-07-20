@@ -22,14 +22,14 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 const TableHeader = ({children}) => (
   <>
     <TableHead>
-      <TableRow>
-        <StyledTableCell width={30}>Nom.</StyledTableCell>
-        <StyledTableCell width={30}>Compl.</StyledTableCell>
-        <StyledTableCell width={150}>Name</StyledTableCell>
-        <StyledTableCell width={150}>Date</StyledTableCell>
-        <StyledTableCell width={50}>Category</StyledTableCell>
+      <TableRow >
+        <StyledTableCell align="center" width={30}>Nom.</StyledTableCell>
+        <StyledTableCell align="center" width={30}>Compl.</StyledTableCell>
+        <StyledTableCell align="center" width={150}>Name</StyledTableCell>
+        <StyledTableCell align="center" width={150}>Date</StyledTableCell>
+        <StyledTableCell align="center" width={50}>Category</StyledTableCell>
         <StyledTableCell align="center">Text</StyledTableCell>
-        <StyledTableCell width={150} >
+        <StyledTableCell align="center" width={150} >
 					{children}
         </StyledTableCell>
       </TableRow>
