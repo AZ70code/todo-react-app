@@ -1,9 +1,11 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSelector, createSlice } from "@reduxjs/toolkit";
 import {
   addFetchTodo,
   completeFetchTodo,
   deleteFetchTodo,
   fetchTodos,
+  todoFetchFromArchive,
+  todoFetchToArchive,
 } from "../Components/Api/todos-api";
 
 const todoSlice = createSlice({
@@ -19,20 +21,6 @@ const todoSlice = createSlice({
     error: null,
   },
   reducers: {
-    todoToArchive(state, action) {
-      state.archive.push(
-        state.todos.find((todo) => todo.id === action.payload),
-      );
-      state.todos = state.todos.filter((todo) => todo.id !== action.payload);
-    },
-    todoFromArchive(state, action) {
-      state.todos.push(
-        state.archive.find((todo) => todo.id === action.payload),
-      );
-      state.archive = state.archive.filter(
-        (todo) => todo.id !== action.payload,
-      );
-    },
     todoFilter: {
       reducer(state, action) {
         if (action.payload.completed) {
@@ -46,12 +34,13 @@ const todoSlice = createSlice({
   },
   extraReducers(builder) {
     builder
-      .addCase(fetchTodos.pending, (state, action) => {
+      .addCase(fetchTodos.pending, (state) => {
         state.status = "loading";
       })
       .addCase(fetchTodos.fulfilled, (state, action) => {
         state.status = "succeeded";
-        state.todos = action.payload;
+        state.archive = action.payload.filter((todo) => todo.archived);
+        state.todos = action.payload.filter((todo) => !todo.archived);
       })
       .addCase(fetchTodos.rejected, (state, action) => {
         state.status = "failed";
@@ -70,21 +59,47 @@ const todoSlice = createSlice({
           }
           return todo;
         });
+      })
+      .addCase(todoFetchToArchive.fulfilled, (state, action) => {
+        state.todos = state.todos.filter(
+          (todo) => todo.id !== action.payload.id,
+        );
+        state.archive.push(action.payload);
+      })
+      .addCase(todoFetchFromArchive.fulfilled, (state, action) => {
+        state.archive = state.archive.filter(
+          (todo) => todo.id !== action.payload.id,
+        );
+        state.todos.push(action.payload);
       });
   },
 });
 export const filterTodos = (state) => state.todos.filter;
 export const archiveTodos = (state) => state.todos.archive;
-export const selectTodos = (state) => state.todos.todos;
+const allTodos = (state) => state.todos.todos;
+
+export const selectTodos = createSelector(
+  [allTodos, filterTodos],
+  (todos, filter) => {
+    const filteredTodos = () => {
+      const filteredCompTodos = todos.filter((todo) => {
+        if (filter.completed !== "all") {
+          return todo.completed === JSON.parse(filter.completed);
+        } else {
+          return todo;
+        }
+      });
+      const filteredCatTodos = filteredCompTodos.filter((todo) => {
+        if (filter.category !== "all") {
+          return todo.category === filter.category;
+        } else return todo;
+      });
+      return filteredCatTodos;
+    };
+    return filteredTodos();
+  },
+);
 export const todosStatus = (state) => state.todos.status;
 export const todosError = (state) => state.todos.error;
-export const {
-  addTodo,
-  deleteTodo,
-  completedTodo,
-  todoToArchive,
-  todoFromArchive,
-  todoEdit,
-  todoFilter,
-} = todoSlice.actions;
+export const { todoFilter } = todoSlice.actions;
 export default todoSlice.reducer;

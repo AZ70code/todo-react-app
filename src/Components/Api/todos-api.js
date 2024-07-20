@@ -12,7 +12,6 @@ export const addFetchTodo = createAsyncThunk("todos/addTodo", async (todo) => {
   const response = await instance.post("/TABLE_CONTENT", todo);
   return response.data;
 });
-
 export const deleteFetchTodo = createAsyncThunk(
   "todos/deleteFetchTodo",
   async (todoId) => {
@@ -31,10 +30,28 @@ export const editFetchTodo = createAsyncThunk(
 );
 export const completeFetchTodo = createAsyncThunk(
   "todos/completeFetchTodo",
-  async (todoId, { dispatch, getState }) => {
+  async (todoId, { getState }) => {
     const todo = getState().todos.todos.find((todo) => todo.id === todoId);
     const response = await instance.patch(`/TABLE_CONTENT/${todoId}`, {
       completed: !todo.completed,
+    });
+    return response.data;
+  },
+);
+export const todoFetchToArchive = createAsyncThunk(
+  "todos/todoFetchToggleArchive",
+  async (todoId) => {
+    const response = await instance.patch(`/TABLE_CONTENT/${todoId}`, {
+      archived: true,
+    });
+    return response.data;
+  },
+);
+export const todoFetchFromArchive = createAsyncThunk(
+  "todos/todoFetchFromArchive",
+  async (todoId) => {
+    const response = await instance.patch(`/TABLE_CONTENT/${todoId}`, {
+      archived: false,
     });
     return response.data;
   },
